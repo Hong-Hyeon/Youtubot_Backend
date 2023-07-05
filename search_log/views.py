@@ -13,6 +13,9 @@ from googleapiclient.discovery import build
 
 import os
 import environ
+import openai
+import time
+import re
 
 env = environ.Env()
 
@@ -20,6 +23,7 @@ env = environ.Env()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
+openai.api_key = env('GPT_APIKEY')
 
 class SearchLog_API(APIView):
     def get(self, request):
@@ -30,6 +34,8 @@ class SearchLog_API(APIView):
         )
     
     def post(self, request):
+        response_obj = {}
+
         serializer = SearchLogSerializer(data = request.data)
         if serializer.is_valid():
             # new_searchlog = serializer.save()
@@ -47,8 +53,24 @@ class SearchLog_API(APIView):
             api_obj = build('youtube', 'v3', developerKey=env('YOUTUBE_APIKEY'))
             response = api_obj.commentThreads().list(part='snippet,replies', videoId=media_id, maxResults=100).execute()
 
+            # print(len(response['items']))
+            for items in response['items']:
+                reply = items['snippet']['topLevelComment']['snippet']['textDisplay']
+                author = items['snippet']['topLevelComment']['snippet']['authorDisplayName']
+
+                predict_obj = openai.ChatCompletion.create(
+                    model='gpt-3.5-turbo',
+                    messages=[
+                        {'role':'user', 'content':'"{}"라는 글을 가장 긍정적인 점수 5에서 가장 부정적인 점수 1까지로 점수를 내면 몇점이야? 단답으로 점수만 말해줘'.format(reply)}
+                    ]
+                )
+                predict_reply = re.sub(r'[^0-9]','',predict_obj.choices[0].message.content)
+                time.sleep(0.5)
+
+                response_obj[author] = {'reply':reply, 'positive_rating':predict_reply}
+
             return Response(
-                response
+                response_obj
             )
             # return Response(
             #     ReviewSerializer(new_review).data,
