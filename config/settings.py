@@ -144,3 +144,21 @@ STATIC_URL = '/static/'
 
 # default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CORS_ALLOWED_ORIGINS = ['http://127.0.0.1:3000']
+CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000",]
+
+CORS_ALLOW_CREDENTIALS=True
+
+CORS_ALLOW_HEADERS = (
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'x_csrftoken',
+)

@@ -67,10 +67,13 @@ class SearchLog_API(APIView):
                 predict_reply = re.sub(r'[^0-9]','',predict_obj.choices[0].message.content)
                 time.sleep(0.5)
 
-                if(predict_reply > 5):
-                    pass
+                if predict_reply != '':
+                    if(int(predict_reply) > 5):
+                        response_obj[author] = {'reply':reply, 'positive_rating':-1}
+                    else:
+                        response_obj[author] = {'reply':reply, 'positive_rating':predict_reply}
                 else:
-                    response_obj[author] = {'reply':reply, 'positive_rating':predict_reply}
+                    response_obj[author] = {'reply':reply, 'positive_rating':-1}
 
             return Response(
                 response_obj
