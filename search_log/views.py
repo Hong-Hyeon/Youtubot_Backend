@@ -35,6 +35,7 @@ class SearchLog_API(APIView):
     
     def post(self, request):
         response_obj = {}
+        temp = {}
 
         serializer = SearchLogSerializer(data = request.data)
         if serializer.is_valid():
@@ -53,27 +54,30 @@ class SearchLog_API(APIView):
             api_obj = build('youtube', 'v3', developerKey=env('YOUTUBE_APIKEY'))
             response = api_obj.commentThreads().list(part='snippet,replies', videoId=media_id, maxResults=100).execute()
 
-            # print(len(response['items']))
             for items in response['items']:
                 reply = items['snippet']['topLevelComment']['snippet']['textDisplay']
                 author = items['snippet']['topLevelComment']['snippet']['authorDisplayName']
 
-                predict_obj = openai.ChatCompletion.create(
-                    model='gpt-3.5-turbo',
-                    messages=[
-                        {'role':'user', 'content':'"{}"라는 글을 가장 긍정적인 점수 5에서 가장 부정적인 점수 1까지로 점수를 내면 몇점이야? 단답으로 점수만 말해줘'.format(reply)}
-                    ]
-                )
-                predict_reply = re.sub(r'[^0-9]','',predict_obj.choices[0].message.content)
-                time.sleep(0.5)
+                temp[author] = reply
 
-                if predict_reply != '':
-                    if(int(predict_reply) > 5):
-                        response_obj[author] = {'reply':reply, 'positive_rating':-1}
-                    else:
-                        response_obj[author] = {'reply':reply, 'positive_rating':predict_reply}
-                else:
-                    response_obj[author] = {'reply':reply, 'positive_rating':-1}
+            predict_obj = openai.ChatCompletion.create(
+                model='gpt-3.5-turbo',
+                messages=[
+                    {'role':'user', 'content':'{} \n 이 json데이터의 value를 평가할거야. 1~5점 중 가장 긍정적인 점수를 5점으로 하고 가장 부정적인 점수를 1점으로 했을 때, 너의 생각에는 value는 각각 몇점이야? 판단하기 어려운 value가 있다면 -1을 줘'.format(temp)}
+                ]
+            )
+            
+            print((predict_obj.choices[0].message.content).split(','))
+            for item in (predict_obj.choices[0].message.content).split(','):
+                item = item.split(':')
+
+                score = re.sub(r"[^0-9]",'',item[1])
+                author = re.sub(r"[%$^*!{}'\n ]", '', item[0])
+
+                for temp_author, reply in temp.items():
+                    if author == temp_author:
+                        response_obj[author] = {reply:score}
+                print(response_obj)
 
             return Response(
                 response_obj
