@@ -9,7 +9,7 @@ packages = [{include = "youtube_bot_backend"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-django = "^4.2.3"
+django = "~4.0"
 mysqlclient = "^2.2.0"
 djangorestframework = "^3.14.0"
 django-cors-headers = "^4.1.0"
