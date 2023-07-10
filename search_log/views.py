@@ -67,7 +67,6 @@ class SearchLog_API(APIView):
                 ]
             )
             
-            print((predict_obj.choices[0].message.content).split(','))
             for item in (predict_obj.choices[0].message.content).split(','):
                 item = item.split(':')
 
@@ -77,7 +76,6 @@ class SearchLog_API(APIView):
                 for temp_author, reply in temp.items():
                     if author == temp_author:
                         response_obj[author] = {reply:score}
-                print(response_obj)
 
             return Response(
                 response_obj
