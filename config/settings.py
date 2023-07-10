@@ -172,6 +172,8 @@ if DEBUG:
     CORS_ALLOWED_ORIGINS = ['http://127.0.0.1:3000']
     CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000",]
 else:
+    SESSION_COOKIE_DOMAIN='.ddonline.online'
+    CSRF_COOKIE_DOMAIN='.ddonline.online'
     CORS_ALLOWED_ORIGINS = ['https://youtubot-frontend.onrender.com']
     CSRF_TRUSTED_ORIGINS = ["https://youtubot-frontend.onrender.com",]
 
