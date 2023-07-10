@@ -1,12 +1,12 @@
 databases:
-  - name: youtubot_Database
+  - name: youtubot
     databaseName: youtubot
     user: youtubot
     region: singapore
 
 services:
   - type: web
-    name: youtubot_Backend
+    name: youtubot
     runtime: python
     region: singapore
     buildCommand: "./build.sh"
