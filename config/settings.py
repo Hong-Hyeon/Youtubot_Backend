@@ -176,10 +176,10 @@ if DEBUG:
     CORS_ALLOWED_ORIGINS = ['http://127.0.0.1:3000']
     CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000",]
 else:
-    SESSION_COOKIE_DOMAIN='.ddonline.online'
-    CSRF_COOKIE_DOMAIN='.ddonline.online'
-    CORS_ALLOWED_ORIGINS = ['https://ddonline.online/']
-    CSRF_TRUSTED_ORIGINS = ["https://ddonline.online/",]
+    # SESSION_COOKIE_DOMAIN='.ddonline.online'
+    # CSRF_COOKIE_DOMAIN='.ddonline.online'
+    CORS_ALLOWED_ORIGINS = ['https://ddonline.online']
+    CSRF_TRUSTED_ORIGINS = ["https://ddonline.online"]
 
 CORS_ALLOW_CREDENTIALS=True
 
