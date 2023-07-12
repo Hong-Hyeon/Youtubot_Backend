@@ -21,4 +21,11 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 class GoogleAuthenticate_API(APIView):
     def post(self, request):
-        print(request.data)
+        api_obj = build('youtube', 'v3', developerKey=env('YOUTUBE_APIKEY'))
+
+        access_token = request.data['access_token']
+        print(access_token)
+
+        return(
+            Response('pass')
+        )
