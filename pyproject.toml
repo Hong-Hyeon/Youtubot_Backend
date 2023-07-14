@@ -20,6 +20,8 @@ whitenoise = {extras = ["brotli"], version = "^6.5.0"}
 gunicorn = "^20.1.0"
 google-api-python-client = "^2.91.0"
 openai = "^0.27.8"
+google-auth-oauthlib = "^1.0.0"
+google-auth = "^2.22.0"
 
 
 [build-system]

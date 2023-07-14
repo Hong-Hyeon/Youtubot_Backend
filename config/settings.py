@@ -52,7 +52,6 @@ THIRD_PARTY_APPS = [
 CUSTOM_APPS = [
     'common.apps.CommonConfig',
     'search_log.apps.SearchLogConfig',
-    'google_authenticate.apps.GoogleAuthenticateConfig',
 ]
 
 SYSTEM_APPS = [

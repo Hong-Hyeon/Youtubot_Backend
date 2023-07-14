@@ -22,5 +22,4 @@ API_BASE_URL = 'api/v1/'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path(API_BASE_URL+'searchlog/', include('search_log.urls')),
-    path(API_BASE_URL+'googleauthenticate/', include('google_authenticate.urls')),
 ]
